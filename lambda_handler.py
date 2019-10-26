@@ -10,12 +10,6 @@ print("Loading function")
 def lambda_handler(event, context):
     print("Received event: " + json.dumps(event, indent=2))
 
-    ## Get the object from the event and show its content type
-    bucket = event["Records"][0]["s3"]["bucket"]["name"]
-    key = urllib.parse.unquote_plus(
-        event["Records"][0]["s3"]["object"]["key"], encoding="utf-8"
-    )
-
     ## prep the data
     create_mutation = """
     mutation($input: createFlowRunInput!){
@@ -24,10 +18,21 @@ def lambda_handler(event, context):
         }
     }
     """
-    inputs = dict(input=dict(flowId=os.getenv("PREFECT__FLOW_ID")))
-    data = json.dumps(dict(query=create_mutation, variables=json.dumps(inputs))).encode(
-        "utf-8"
-    )
+    inputs = dict(flowId=os.getenv("PREFECT__FLOW_ID"))
+
+    # if you wish to pass information about the triggering event as a parameter,
+    # simply add that to the inputs dictionary under the parameters key,
+    # whose value should be a dictionary of PARAMETER_NAME -> PARAMETER_VALUE
+    # inputs['parameters'] = dict(event=event)
+
+    # if you wish to prevent duplicate runs from being created, you may also
+    # provide an idempotency key
+    # inputs['idempotencyKey'] = event['Records'][0]['eventTime'] # for example
+
+    variables = dict(input=inputs)
+    data = json.dumps(
+        dict(query=create_mutation, variables=json.dumps(variables))
+    ).encode("utf-8")
 
     ## prep the request
     req = urllib.request.Request(os.getenv("PREFECT__CLOUD__API"), data=data)
