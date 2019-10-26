@@ -29,6 +29,15 @@ def lambda_handler(event, context):
     # provide an idempotency key
     # inputs['idempotencyKey'] = event['Records'][0]['eventTime'] # for example
 
+    # if you wish to pass a start time other than immediately
+    # you can provide an ISO formatted timestamp for when you
+    # want this run to begin
+
+    # from datetime import datetime, timedelta
+
+    # actually run the flow in two hours
+    # inputs['scheduledStartTime'] = (datetime.utcnow() + timedelta(hours=2)).isoformat()
+
     variables = dict(input=inputs)
     data = json.dumps(
         dict(query=create_mutation, variables=json.dumps(variables))

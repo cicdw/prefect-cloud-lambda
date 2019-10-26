@@ -15,3 +15,4 @@ As written, this lambda function simply triggers a flow run.  There are a few wa
 
 - configure your Flow to respond to information about the triggering event through a Prefect Parameter
 - configure your Lambda function to pass an `idempotencyKey` to ensure duplicate runs aren't created
+- configure your Flow to run at some time in the future instead of immediately
