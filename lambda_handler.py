@@ -14,7 +14,9 @@ def lambda_handler(event, context):
     create_mutation = """
     mutation($input: createFlowRunInput!){
         createFlowRun(input: $input){
-            flow_run{id}
+            flow_run{
+                id
+            }
         }
     }
     """
