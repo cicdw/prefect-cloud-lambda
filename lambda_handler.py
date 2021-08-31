@@ -12,15 +12,15 @@ def lambda_handler(event, context):
 
     ## prep the data
     create_mutation = """
-    mutation($input: createFlowRunInput!){
-        createFlowRun(input: $input){
+    mutation($input: create_flow_run_input!){
+        create_flow_run(input: $input){
             flow_run{
                 id
             }
         }
     }
     """
-    inputs = dict(flowId=os.getenv("PREFECT__FLOW_ID"))
+    inputs = dict(flow_id=os.getenv("PREFECT__FLOW_ID"))
 
     # if you wish to pass information about the triggering event as a parameter,
     # simply add that to the inputs dictionary under the parameters key,
@@ -29,7 +29,11 @@ def lambda_handler(event, context):
 
     # if you wish to prevent duplicate runs from being created, you may also
     # provide an idempotency key
-    # inputs['idempotencyKey'] = event['Records'][0]['eventTime'] # for example
+    # inputs['idempotency_key'] = event['Records'][0]['eventTime'] # for example
+
+    # if you wish to name your flow run to be informative, you can do that
+    # with the flow_run_name input
+    # inputs['flow_run_name'] = event['Records'][0]['eventTime'] # for example
 
     # if you wish to pass a start time other than immediately
     # you can provide an ISO formatted timestamp for when you
@@ -49,7 +53,7 @@ def lambda_handler(event, context):
     req = urllib.request.Request(os.getenv("PREFECT__CLOUD__API"), data=data)
     req.add_header("Content-Type", "application/json")
     req.add_header(
-        "Authorization", "Bearer {}".format(os.getenv("PREFECT__CLOUD__AUTH_TOKEN"))
+        "Authorization", "Bearer {}".format(os.getenv("PREFECT__CLOUD__API_KEY"))
     )
 
     ## send the request and return the response
