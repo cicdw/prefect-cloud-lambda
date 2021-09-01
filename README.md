@@ -7,7 +7,7 @@ A template for an AWS Lambda function that triggers Prefect Flow Runs.
 This function requires three environment variables:
 - `PREFECT__FLOW_ID`: a string UUID of the flow you wish to create a run for
 - `PREFECT__CLOUD__API`: the URL of the Cloud API; most likely you'll want to use `"https://api.prefect.io/"`
-- `PREFECT__CLOUD__AUTH_TOKEN`: an API token which has appropriate permissions to create flow runs
+- `PREFECT__CLOUD__API_KEY`: an API key which has appropriate permissions to create flow runs
 
 ## Optional enhancements
 
